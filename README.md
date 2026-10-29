@@ -61,16 +61,30 @@ Toolchain used for the last check: solc `0.8.33`, `@openzeppelin/contracts` `5.4
 | `0` — Baikal | `ipfs://bafybeigblis3mcmfwizm4hkqfrn4uvcownjecwf5reatzd6uagg43scwve/0.json` | `ipfs://bafybeia6txussuxokmfsdjf6blo3duat35rkak3tcds22rvqiw2lt6kj54/0.jpg` |
 | `1` — Perm | `ipfs://bafybeigblis3mcmfwizm4hkqfrn4uvcownjecwf5reatzd6uagg43scwve/1.json` | `ipfs://bafybeia6txussuxokmfsdjf6blo3duat35rkak3tcds22rvqiw2lt6kj54/1.jpg` |
 
-The token ID and the painting's internal ID are different identifiers. The metadata does not store the current owner.
+The token ID, the painting's `Artwork ID` and the author's `Author ID` are different identifiers. The metadata does not store the current owner. A corrected version of the metadata is prepared in `metadata/` and will get a new CID before the next deployment.
 
 ## Repository contents
 
+```text
+DAO-gallery/
+├── contracts/          smart contracts
+├── test/               contract tests (Hardhat)
+├── ignition/modules/   deployment modules (Hardhat Ignition)
+├── metadata/           next version of NFT metadata for IPFS
+├── database/           prototype database, schema, notes for PostgreSQL
+├── economics/          financial model and business model
+├── legal/              legal research questions and future documents
+└── docs/               architecture; planning/ — early planning materials
+```
+
 | Path | Contents |
 |---|---|
-| `DAOgallery.sol`, `Marketplace.sol` | Smart contracts |
-| `DAO-gallery.db` | Prototype database (SQLite file) with test data: `users`, `artworks`, `NFTs`, `transactions`. The target production database is PostgreSQL. |
-| `dao_gallery_financial_model.xlsx` | Financial model: parameters with three scenarios, income, expenses, profit, cash flow, forecast balance (USD, 2026, monthly). All figures are forecasts. |
-| `structure/` | Early planning materials: MVP scope, plan, structure, flowchart, DAO participation levels |
+| `contracts/` | `DAOgallery.sol`, `Marketplace.sol` |
+| `metadata/` | `0.json`, `1.json` prepared for re-upload (adds `Artwork ID`, fixes a typo); see `metadata/README.md` |
+| `database/` | `DAO-gallery.db` — prototype (SQLite file) with test data; `schema.sql`; target production database is PostgreSQL |
+| `economics/` | `dao_gallery_financial_model.xlsx` — three scenarios, income, expenses, profit, cash flow, forecast balance (USD, 2026, monthly); all figures are forecasts |
+| `legal/` | Research questions and the target list of documents |
+| `docs/` | `architecture.md`; `planning/` — MVP scope, plan, structure, flowchart, DAO participation levels |
 | `CLAUDE.md` | Working rules for AI-assisted development |
 
 ## Status

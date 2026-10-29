@@ -20,6 +20,11 @@ Three workstreams: technical, economic, legal. When a task touches one, note any
 - Never commit private keys, seed phrases, RPC URLs with keys, Pinata secrets or `.env` files.
 - Deploy to testnets only until there is an audit.
 
+## Layout
+- Repository root is a Hardhat 3 project: `contracts/`, `test/`, `ignition/modules/`, `hardhat.config.ts`.
+- `metadata/` — NFT metadata for IPFS; `database/` — prototype DB and schema; `economics/` — financial and business model; `legal/` — legal research and documents; `docs/` — architecture and planning materials.
+- The owner's local working copy is `D:\forClaude\DAO-gallery`; tests run there.
+
 ## Technical conventions
 - Solidity `^0.8.33`, OpenZeppelin Contracts 5.x (last verified with 5.4.0). Use the 5.x API (`Ownable(initialOwner)`, `_requireOwned`).
 - `DAOgallery.sol`: minting and ownership only. `mintNFT` is `onlyOwner`, token IDs start at 0, `tokenURI = baseURI + id + ".json"`, base URI is fixed at deployment.

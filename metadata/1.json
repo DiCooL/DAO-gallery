@@ -1,0 +1,10 @@
+{
+  "name": "Perm",
+  "description": "A picture of the city of Perm",
+  "image": "ipfs://bafybeia6txussuxokmfsdjf6blo3duat35rkak3tcds22rvqiw2lt6kj54/1.jpg",
+  "attributes": [
+    { "trait_type": "Author", "value": "Local Gallery" },
+    { "trait_type": "Author ID", "value": "1" },
+    { "trait_type": "Artwork ID", "value": "1" }
+  ]
+}

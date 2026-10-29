@@ -16,8 +16,8 @@ describe("Marketplace", async function () {
   async function deploy() {
     const nft = await viem.deployContract("DAOgallery", [owner.account.address]);
     const market = await viem.deployContract("Marketplace", [nft.address, owner.account.address]);
-    await nft.write.mintNFT([seller.account.address]);
-    await nft.write.mintNFT([seller.account.address]);
+    await nft.write.mintNFT([seller.account.address, "ipfs://bafkreitest"]);
+    await nft.write.mintNFT([seller.account.address, "ipfs://bafkreitest"]);
     return { nft, market };
   }
 

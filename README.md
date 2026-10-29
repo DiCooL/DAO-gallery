@@ -41,7 +41,7 @@ The blockchain is the source of truth for ownership (`ownerOf`). The database on
 
 | Contract | Purpose |
 |---|---|
-| `DAOgallery.sol` | ERC-721 collection `DAO-gallery` (`DAOG`). Only the owner can mint; `mintNFT(to)` issues the next token directly to `to`. Token IDs start at `0`. `tokenURI(id)` = `ipfs://<metadata CID>/<id>.json`; the base URI is fixed at deployment. |
+| `DAOgallery.sol` | ERC-721 collection `DAO-gallery` (`DAOG`) with a separate metadata URI per token (`ERC721URIStorage`, ERC-4906). Only the owner can mint; `mintNFT(to, uri)` issues the next token directly to `to` and stores its `ipfs://<CID>`. Token IDs start at `0`. New paintings are added at any time without redeploying; existing tokens are not affected. |
 | `Marketplace.sol` | Separate contract that works with `DAOgallery` by address. `listNFT`, `buyNFT` (payable, exact price), `cancelListing`, `withdraw` (owner only). The NFT stays with the seller until the sale. Commission is 10% in wei, the seller receives the rest. `collectedCommission` is the amount available to withdraw; `totalCommissionEarned` is the lifetime total. Events: `NFTListed`, `NFTSold`, `ListingCanceled`, `CommissionWithdrawn`. |
 
 Toolchain: Hardhat 3, solc `0.8.33`, `@openzeppelin/contracts` `5.4.0`, optimizer enabled (200 runs). Both contracts compile without errors or warnings.
@@ -53,7 +53,7 @@ npx hardhat test
 
 ### Sale flow
 
-1. The owner of `DAOgallery` mints a token to the author or recipient.
+1. The painting's metadata is uploaded to IPFS; the owner of `DAOgallery` calls `mintNFT(author, "ipfs://<CID>")`.
 2. The token holder calls `approve(marketplace, tokenId)` or `setApprovalForAll(marketplace, true)`.
 3. The holder calls `listNFT(tokenId, price)`.
 4. A buyer calls `buyNFT(tokenId)` with `msg.value == price`; the NFT moves to the buyer, 90% goes to the seller, 10% stays in the marketplace.
@@ -61,12 +61,18 @@ npx hardhat test
 
 ## NFT metadata (IPFS)
 
+Each painting has its own metadata file in IPFS with its own CID; the CID is passed to `mintNFT` and stored on-chain for that token.
+
 | Token | Metadata | Image |
 |---|---|---|
-| `0` — Baikal | `ipfs://bafybeigblis3mcmfwizm4hkqfrn4uvcownjecwf5reatzd6uagg43scwve/0.json` | `ipfs://bafybeia6txussuxokmfsdjf6blo3duat35rkak3tcds22rvqiw2lt6kj54/0.jpg` |
-| `1` — Perm | `ipfs://bafybeigblis3mcmfwizm4hkqfrn4uvcownjecwf5reatzd6uagg43scwve/1.json` | `ipfs://bafybeia6txussuxokmfsdjf6blo3duat35rkak3tcds22rvqiw2lt6kj54/1.jpg` |
+| `0` — Baikal | `ipfs://bafkreigjysstc6mzugi7ro3qehfthy2733asowpeita32eb6ix3vcuqnb4` | `ipfs://bafybeia6txussuxokmfsdjf6blo3duat35rkak3tcds22rvqiw2lt6kj54/0.jpg` |
+| `1` — Perm | `ipfs://bafkreiaw46h2nxh3ebqcqh4k56tjfwum674b2d5z2fbtgoefljmh6jal4y` | `ipfs://bafybeia6txussuxokmfsdjf6blo3duat35rkak3tcds22rvqiw2lt6kj54/1.jpg` |
 
-The token ID, the painting's `Artwork ID` and the author's `Author ID` are different identifiers. The metadata does not store the current owner. A corrected version of the metadata is prepared in `metadata/` and will get a new CID before the next deployment.
+The token ID, the painting's `Artwork ID` and the author's `Author ID` are different identifiers. The metadata does not store the current owner.
+
+### Preview
+
+`npx hardhat run scripts/preview-nft.ts` deploys both contracts to a local Hardhat network, mints the tokens above, runs one sale through the marketplace and writes `nft-preview/index.html` with images, attributes, owners, CIDs and transaction hashes.
 
 ## Repository contents
 
@@ -75,6 +81,7 @@ DAO-gallery/
 ├── contracts/          smart contracts
 ├── test/               contract tests (Hardhat)
 ├── ignition/modules/   deployment modules (Hardhat Ignition)
+├── scripts/            preview-nft.ts — local NFT preview page
 ├── metadata/           next version of NFT metadata for IPFS
 ├── database/           prototype database, schema, notes for PostgreSQL
 ├── economics/          financial model and business model
@@ -85,7 +92,7 @@ DAO-gallery/
 | Path | Contents |
 |---|---|
 | `contracts/` | `DAOgallery.sol`, `Marketplace.sol` |
-| `metadata/` | `0.json`, `1.json` prepared for re-upload (adds `Artwork ID`, fixes a typo); see `metadata/README.md` |
+| `metadata/` | Source files of the metadata uploaded to IPFS, one file per token; see `metadata/README.md` |
 | `database/` | `DAO-gallery.db` — prototype (SQLite file) with test data; `schema.sql`; target production database is PostgreSQL |
 | `economics/` | `dao_gallery_financial_model.xlsx` — three scenarios, income, expenses, profit, cash flow, forecast balance (USD, 2026, monthly); all figures are forecasts |
 | `legal/` | Research questions and the target list of documents |

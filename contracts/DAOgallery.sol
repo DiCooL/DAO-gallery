@@ -3,32 +3,24 @@ pragma solidity ^0.8.33;
 
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
+import {ERC721URIStorage} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
-contract DAOgallery is Ownable, ERC721 {
-    constructor(address initialOwner)
-        ERC721("DAO-gallery", "DAOG")
-        Ownable(initialOwner)
-    {}
+contract DAOgallery is ERC721URIStorage, Ownable {
+    uint256 private _nextTokenId;
 
-    event NewNFT(address owner, uint256 tokenId);
+    event NewNFT(address indexed owner, uint256 indexed tokenId, string uri);
 
-    uint256 private _currentTokenId;
+    constructor(address initialOwner) ERC721("DAO-gallery", "DAOG") Ownable(initialOwner) {}
 
-    function _baseURI() internal pure override returns (string memory) {
-        return "ipfs://bafybeigblis3mcmfwizm4hkqfrn4uvcownjecwf5reatzd6uagg43scwve/";
+    function mintNFT(address to, string calldata uri) external onlyOwner returns (uint256 tokenId) {
+        require(bytes(uri).length > 0, "Empty token URI");
+        tokenId = _nextTokenId++;
+        _safeMint(to, tokenId);
+        _setTokenURI(tokenId, uri);
+        emit NewNFT(to, tokenId, uri);
     }
 
-    function mintNFT(address _to) public onlyOwner{
-        _safeMint(_to, _currentTokenId);
-        emit NewNFT(_to, _currentTokenId);
-        _currentTokenId++;
-    }
-
-    function tokenURI(uint256 tokenId) public view override  returns (string memory) {
-        _requireOwned(tokenId);
-
-        string memory baseURI = _baseURI();
-        return bytes(baseURI).length > 0 ? string.concat(baseURI, Strings.toString(tokenId), ".json") : "";
+    function totalMinted() external view returns (uint256) {
+        return _nextTokenId;
     }
 }

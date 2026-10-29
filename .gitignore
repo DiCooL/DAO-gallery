@@ -11,3 +11,4 @@ ignition/deployments/chain-31337/
 *.log
 .DS_Store
 Thumbs.db
+nft-preview/

@@ -44,7 +44,12 @@ The blockchain is the source of truth for ownership (`ownerOf`). The database on
 | `DAOgallery.sol` | ERC-721 collection `DAO-gallery` (`DAOG`). Only the owner can mint; `mintNFT(to)` issues the next token directly to `to`. Token IDs start at `0`. `tokenURI(id)` = `ipfs://<metadata CID>/<id>.json`; the base URI is fixed at deployment. |
 | `Marketplace.sol` | Separate contract that works with `DAOgallery` by address. `listNFT`, `buyNFT` (payable, exact price), `cancelListing`, `withdraw` (owner only). The NFT stays with the seller until the sale. Commission is 10% in wei, the seller receives the rest. `collectedCommission` is the amount available to withdraw; `totalCommissionEarned` is the lifetime total. Events: `NFTListed`, `NFTSold`, `ListingCanceled`, `CommissionWithdrawn`. |
 
-Toolchain used for the last check: solc `0.8.33`, `@openzeppelin/contracts` `5.4.0`, optimizer enabled (200 runs). Both contracts compile without errors or warnings.
+Toolchain: Hardhat 3, solc `0.8.33`, `@openzeppelin/contracts` `5.4.0`, optimizer enabled (200 runs). Both contracts compile without errors or warnings.
+
+```powershell
+npm install
+npx hardhat test
+```
 
 ### Sale flow
 
@@ -93,7 +98,7 @@ DAO-gallery/
 - [x] `Marketplace.sol` written and fixed (commission accounting, self-purchase, call order)
 - [x] Both contracts compile with solc 0.8.33 and OpenZeppelin 5.4.0
 - [x] Metadata and images for tokens 0 and 1 are available in IPFS
-- [ ] Build environment and automated tests
+- [x] Hardhat 3 project and 31 automated tests (success and failure paths, payment rejection, re-entry) — all passing
 - [ ] Deployment to the Sepolia testnet (contract addresses will be listed here)
 - [ ] End-to-end scenario: mint → approve → list → buy → commission → withdraw
 - [ ] Financial model fixes (scenario switch, profit tax, one-off vs operating costs)

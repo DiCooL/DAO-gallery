@@ -21,17 +21,17 @@ Three workstreams: technical, economic, legal. When a task touches one, note any
 - Deploy to testnets only until there is an audit.
 
 ## Layout
-- Repository root is a Hardhat 3 project: `contracts/`, `test/`, `ignition/modules/`, `hardhat.config.ts`.
+- Repository root is a Hardhat 3 project: `contracts/`, `test/`, `ignition/modules/`, `scripts/`, `hardhat.config.ts`.
 - `metadata/` — NFT metadata for IPFS; `database/` — prototype DB and schema; `economics/` — financial and business model; `legal/` — legal research and documents; `docs/` — architecture and planning materials.
 - The owner's local working copy is `D:\forClaude\DAO-gallery`; tests run there.
 
 ## Technical conventions
 - Solidity `^0.8.33`, OpenZeppelin Contracts 5.x (last verified with 5.4.0). Use the 5.x API (`Ownable(initialOwner)`, `_requireOwned`).
-- `DAOgallery.sol`: minting and ownership only. `mintNFT` is `onlyOwner`, token IDs start at 0, `tokenURI = baseURI + id + ".json"`, base URI is fixed at deployment.
+- `DAOgallery.sol`: minting and ownership only, `ERC721URIStorage`. `mintNFT(to, uri)` is `onlyOwner`, token IDs start at 0, each token stores its own `ipfs://<CID>`. The collection grows continuously: new paintings are minted without redeploying.
 - `Marketplace.sol`: separate contract, no ERC-721 inheritance; works through approval. Amounts are in wei. `collectedCommission` is withdrawable, `totalCommissionEarned` is lifetime.
 - In functions that move value: checks → state changes → external calls; send ETH with `call` and check the result; use `nonReentrant`.
 - Code is not done until it compiles and has tests covering success and failure paths.
-- Changing metadata changes the IPFS CID and therefore requires a new `DAOgallery` deployment.
+- Each painting's metadata is a separate file in IPFS. The CID is the content hash: editing a file gives a new CID, and a minted token keeps the CID it was minted with.
 - The blockchain is the source of truth for ownership; the SQL database (target: PostgreSQL) only mirrors events.
 
 ## Economic and legal work

@@ -1,16 +1,21 @@
 # NFT metadata
 
-`0.json` and `1.json` here are the **next version** of the metadata, prepared for re-upload to IPFS. The version currently published under the CID in `DAOgallery._baseURI()` differs:
+One JSON file per token. Each file is uploaded to IPFS on its own and gets its own CID; the CID is passed to `mintNFT(to, "ipfs://<CID>")` and stored on-chain for that token. New paintings are added as new files, existing ones are never changed.
 
-| Change | Published (`bafybeigblis3...scwve`) | This folder |
+| File | Token | CID |
 |---|---|---|
-| `0.json` description | "A picture of a beautiful in the Irkutsk region" | "A picture of the beautiful Lake Baikal in the Irkutsk region" |
-| Attributes | `Author`, `Author ID` | `Author`, `Author ID`, `Artwork ID` |
+| `0.json` | 0 — Baikal | `bafkreigjysstc6mzugi7ro3qehfthy2733asowpeita32eb6ix3vcuqnb4` |
+| `1.json` | 1 — Perm | `bafkreiaw46h2nxh3ebqcqh4k56tjfwum674b2d5z2fbtgoefljmh6jal4y` |
 
+Attributes:
+- `Author` — author's name.
 - `Author ID` — identifier in the planned author registry.
 - `Artwork ID` — identifier of the physical painting in the foundation's records; not necessarily equal to the token ID.
-- The current owner is never stored in metadata; use `ownerOf(tokenId)`.
 
-Images: `ipfs://bafybeia6txussuxokmfsdjf6blo3duat35rkak3tcds22rvqiw2lt6kj54/0.jpg` and `1.jpg` (unchanged).
+The current owner is never stored in metadata; use `ownerOf(tokenId)`.
 
-Uploading this folder to IPFS produces a new CID. `baseURI` is fixed at deployment, so the new CID must be set in `contracts/DAOgallery.sol` before the next deployment.
+The CID is a hash of the file content, so any edit produces a new CID. A token keeps the CID it was minted with.
+
+Images: `ipfs://bafybeia6txussuxokmfsdjf6blo3duat35rkak3tcds22rvqiw2lt6kj54/0.jpg` and `1.jpg`.
+
+The earlier folder version (`bafybeigblis3mcmfwizm4hkqfrn4uvcownjecwf5reatzd6uagg43scwve`, without `Artwork ID`) is no longer used by the contract.

@@ -1,0 +1,10 @@
+{
+  "name": "Baikal",
+  "description": "A picture of the beautiful Lake Baikal in the Irkutsk region",
+  "image": "ipfs://bafybeia6txussuxokmfsdjf6blo3duat35rkak3tcds22rvqiw2lt6kj54/0.jpg",
+  "attributes": [
+    { "trait_type": "Author", "value": "Unknown" },
+    { "trait_type": "Author ID", "value": "0" },
+    { "trait_type": "Artwork ID", "value": "0" }
+  ]
+}

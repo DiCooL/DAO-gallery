@@ -1,0 +1,30 @@
+{
+  "name": "dao-gallery",
+  "private": true,
+  "version": "0.1.0",
+  "description": "DAO-Gallery MVP: ERC-721 collection and marketplace",
+  "type": "module",
+  "scripts": {
+    "build": "hardhat build",
+    "test": "hardhat test"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "5.4.0"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ignition": "^3.1.8",
+    "@nomicfoundation/hardhat-ignition-viem": "^3.1.6",
+    "@nomicfoundation/hardhat-keystore": "^3.0.12",
+    "@nomicfoundation/hardhat-network-helpers": "^3.0.11",
+    "@nomicfoundation/hardhat-node-test-runner": "^3.0.17",
+    "@nomicfoundation/hardhat-toolbox-viem": "^5.0.7",
+    "@nomicfoundation/hardhat-verify": "^3.0.21",
+    "@nomicfoundation/hardhat-viem": "^3.0.9",
+    "@nomicfoundation/hardhat-viem-assertions": "^3.1.2",
+    "@nomicfoundation/ignition-core": "^3.1.8",
+    "@types/node": "^22.8.5",
+    "hardhat": "^3.21.2",
+    "typescript": "~5.9.3",
+    "viem": "^2.47.6"
+  }
+}
